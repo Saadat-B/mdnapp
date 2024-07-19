@@ -68,7 +68,7 @@ exports.book_create_get = asyncHandler(async (req, res, next) => {
     Genre.find().sort({ name: 1 }).exec(),
   ]);
 
-  res.render("book_form", {
+  return res.render("book_form", {
     title: "Create Book",
     authors: allAuthors,
     genres: allGenres,
@@ -80,6 +80,7 @@ exports.book_create_get = asyncHandler(async (req, res, next) => {
 // Handle book create on POST.
 exports.book_create_post = [
   (req, res, next) => {
+    console.log("idhar aa gaya");
     if (!Array.isArray(req.body.genre)) {
       req.body.genre =
         typeof req.body.genre === "undefined" ? [] : [req.body.genre];
@@ -90,17 +91,26 @@ exports.book_create_post = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
+
   body("author", "Author must not be empty.")
     .trim()
     .isLength({ min: 1 })
     .escape(),
+
   body("summary", "Summary must not be empty.")
     .trim()
     .isLength({ min: 1 })
     .escape(),
+
   body("isbn", "ISBN must not be empty.").trim().isLength({ min: 1 }).escape(),
-  body("genre.*").escape,
+
+  body("genre.*").escape(),
+  (req, res, next) => {
+    console.log("body genre ke baad aa gaya");
+    next();
+  },
   asyncHandler(async (req, res, next) => {
+    console.log("idhar bhi aa gaya bhai");
     const errors = validationResult(req);
 
     const book = new Book({
@@ -123,7 +133,7 @@ exports.book_create_post = [
         }
       }
 
-      res.render("book_form", {
+      return res.render("book_form", {
         title: "Create Book",
         authors: allAuthors,
         genres: allGenres,
@@ -132,7 +142,7 @@ exports.book_create_post = [
       });
     } else {
       await book.save();
-      res.redirect(book.url);
+      return res.redirect(book.url);
     }
   }),
 ];
