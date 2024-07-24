@@ -1,3 +1,3 @@
 readme file added
 Redo the project again
-start sql
+start sql from odin project
