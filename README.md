@@ -1,3 +1,1 @@
-readme file added
-Redo the project again
-start sql from odin project
+start with https://www.sqlteaching.com/
